@@ -35,8 +35,6 @@ IntLiteral = 0 | [1-9][0-9]*
     "+"             { return symbol( Symbols.PLUS ); }  
     "*"             { return symbol( Symbols.TIMES ); }
     "-"             { return symbol( Symbols.MINUS ); }
-    "("             { return symbol( Symbols.LPAREN ); }
-    ")"             { return symbol( Symbols.RPAREN ); }
     "=="             { return symbol( Symbols.EGAL ); }
     "!="             { return symbol( Symbols.DIFF ); }
     "<"             { return symbol( Symbols.INF ); }
