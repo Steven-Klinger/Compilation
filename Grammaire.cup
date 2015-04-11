@@ -70,21 +70,21 @@ precedence left PLUS, MINUS, TIMES, EGAL, DIFF, SUP, INF ;
 
 		
 EXP     ::= EXP:e1 PLUS EXP:e2
-                {: EXP = new Plus(e1, e2);:}
+                {: RESULT = new Plus(e1, e2);:}
 	|   EXP:e1 MINUS EXP:e2
-                {: EXP = new Moins(e1, e2);:}
+                {: RESULT = new Moins(e1, e2);:}
 	|   EXP:e1 TIMES EXP:e2
-                {: EXP = new Mult(e1, e2);:}
+                {: RESULT = new Mult(e1, e2);:}
 	|   EXP:e1 SUP EXP:e2
-                {: EXP = new Superieur(e1, e2);:}
+                {: RESULT = new Superieur(e1, e2);:}
 	|   EXP:e1 INF EXP:e2
-                {: EXP = new Inferieur(e1, e2);:}
+                {: RESULT = new Inferieur(e1, e2);:}
         |   EXP:e1 EGAL EXP:e2
-                {: EXP = new Egal(e1, e2);:}
+                {: RESULT = new Egal(e1, e2);:}
         |   EXP:e1 DIFF EXP:e2
-                {: EXP = new Different(e1, e2);:}
+                {: RESULT = new Different(e1, e2);:}
         |   CSTE:c
                 {: RESULT = new CsteEntiere(c);:}
         |   MINUS EXP:e1
-                {: EXP = new Moins(0, e1);:}
+                {: RESULT = new Moins(0, e1);:}
 	;
