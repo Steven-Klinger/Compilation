@@ -45,4 +45,5 @@ IntLiteral = 0 | [1-9][0-9]*
 
 /* error fallback */
 .|\n                             { throw new Error("Illegal character <"+
+                                                    yytext()+">"); }
                                                     
