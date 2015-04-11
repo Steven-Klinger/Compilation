@@ -83,9 +83,8 @@ EXP     ::= EXP:e1 PLUS EXP:e2
                 {: RESULT = new Egal(e1, e2);:}
         |   EXP:e1 DIFF EXP:e2
                 {: RESULT = new Different(e1, e2);:}
-        |   NUMBER:n
-                {: RESULT = new CsteEntiere(n);:}
+        |   CSTE:c
+                {: RESULT = new CsteEntiere(c);:}
         |   MINUS EXP:e1
                 {: RESULT = new Moins(0, e1);:}
 	;
-                                                    yytext()+">"); }
