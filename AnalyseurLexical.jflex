@@ -39,10 +39,10 @@ IntLiteral = 0 | [1-9][0-9]*
     "!="             { return symbol( Symbols.DIFF ); }
     "<"             { return symbol( Symbols.INF ); }
     ">"             { return symbol( Symbols.SUP ); }
-    {IntLiteral}    { return symbol( Symbols.NUMBER, new Integer( yytext() ) ); }
+    {IntLiteral}    { return symbol( Symbols.CSTE, new Integer( yytext() ) ); }
     {WhiteSpace}    { /* ignore */ }
 }
 
 /* error fallback */
 .|\n                             { throw new Error("Illegal character <"+
-                                                    yytext()+">"); }
+                                                    
