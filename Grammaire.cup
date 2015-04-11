@@ -1,48 +1,91 @@
-package plic;
-
+package plic ;
 import java_cup.runtime.*;
+action code {: /* vide pour le moment */
+	    :} ;
+   
+/* Parser code to change the way the parser reports errors (include
+   line and column number of the error). */
+parser code {:
+    /* Change the method report_error so it will display the line and column of where the error
+       occurred in the input as well as the reason for the error which is passed into the method
+       in the String 'message'. */
+    public void report_error(String message, Object info) {
+   
+        /* Create a StringBuffer called 'm' with the string 'Error' in it. */
+        StringBuffer m = new StringBuffer("Error");
+   
+        /* Check if the information passed to the method is the same type as the type 
+           java_cup.runtime.Symbol. */
+        if (info instanceof java_cup.runtime.Symbol) {
+            /* Declare a java_cup.runtime.Symbol object 's' with the information in the object 
+               info that is being typecasted as a java_cup.runtime.Symbol object. */
+            java_cup.runtime.Symbol s = ((java_cup.runtime.Symbol) info);
+   
+            /* Check if the line number in the input is greater or equal to zero. */
+            if (s.left >= 0) {                
+                /* Add to the end of the StringBuffer error message the line number of the error 
+                   in the input. */
+                m.append(" in line "+(s.left+1));   
+                /* Check if the column number in the input is greater or equal to zero. */
+                if (s.right >= 0)                    
+                    /* Add to the end of the StringBuffer error message the column number of the 
+                       error in the input. */
+                    m.append(", column "+(s.right+1));
+            }
+        }
+        /* Add to the end of the StringBuffer error message created in this method the message that
+           was passed into this method. */
+        m.append(" : "+message);
+   
+        /* Print the contents of the StringBuffer 'm', which contains an error message, out on 
+           a line. */
+        System.err.println(m);
+    }
+    /* Change the method report_fatal_error so when it reports a fatal error it will display the 
+       line and column number of where the fatal error occurred in the input as well as the reason
+       for the fatal error which is passed into the method in the object 'message' and then exit.*/
+    public void report_fatal_error(String message, Object info) {
+        report_error(message, info);
+        System.exit(1);
+    }
+:};
+/* ------------Declaration of Terminals and Non Terminals Section----------- */
+/* Terminals (tokens returned by the scanner).  
+   Terminals that have no value are listed first and then terminals that do have a value, in this 
+   case a String value, are listed on the next line down. */
 
-%%
-%public
-%class Lexer
-%cup
-%line
-%column
-%eofval{ 
-    return symbol( Symbols.EOF );
-%eofval}
+terminal            PLUS, MINUS, TIMES, SUP, INF, EGAL, DIFF ;
+terminal Integer    CSTE;
+   
+/* Non terminals used in the grammar section.  
+   Non terminals that have an object value are listed first and then non terminals that have an 
+   integer value are listed.  An object value means that it can be any type, it isn't set to a 
+   specific type.  So it could be an Integer or a String or whatever. */
 
-%{
-  StringBuffer string = new StringBuffer();
+non terminal 	EXP;
 
-  private Symbol symbol(int type) {
-    return new Symbol(type, yyline, yycolumn);
-  }
-  private Symbol symbol(int type, Object value) {
-    return new Symbol(type, yyline, yycolumn, value);
-  }
-%}
+precedence left PLUS, MINUS, TIMES, EGAL, DIFF, SUP, INF ;
 
-LineTerminator = \r|\n|\r\n
-WhiteSpace     = {LineTerminator} | [ \t\f]
+/* ----------------------------Grammar Section-------------------- */
 
-IntLiteral = 0 | [1-9][0-9]*
-
-%%
-
-<YYINITIAL>
-{
-    "+"             { return symbol( Symbols.PLUS ); }  
-    "*"             { return symbol( Symbols.TIMES ); }
-    "-"             { return symbol( Symbols.MINUS ); }
-    "=="             { return symbol( Symbols.EGAL ); }
-    "!="             { return symbol( Symbols.DIFF ); }
-    "<"             { return symbol( Symbols.INF ); }
-    ">"             { return symbol( Symbols.SUP ); }
-    {IntLiteral}    { return symbol( Symbols.NUMBER, new Integer( yytext() ) ); }
-    {WhiteSpace}    { /* ignore */ }
-}
-
-/* error fallback */
-.|\n                             { throw new Error("Illegal character <"+
+		
+EXP     ::= EXP:e1 PLUS EXP:e2
+                {: RESULT = new Plus(e1, e2);:}
+	|   EXP:e1 MINUS EXP:e2
+                {: RESULT = new Moins(e1, e2);:}
+	|   EXP:e1 TIMES EXP:e2
+                {: RESULT = new Mult(e1, e2);:}
+	|   EXP:e1 SUP EXP:e2
+                {: RESULT = new Superieur(e1, e2);:}
+	|   EXP:e1 INF EXP:e2
+                {: RESULT = new Inferieur(e1, e2);:}
+        |   EXP:e1 EGAL EXP:e2
+                {: RESULT = new Egal(e1, e2);:}
+        |   EXP:e1 DIFF EXP:e2
+                {: RESULT = new Different(e1, e2);:}
+        |   NUMBER:n
+                {: RESULT = new CsteEntiere(n);:}
+        |   MINUS EXP:e1
+                {: RESULT = new Moins(0, e1);:}
+	;
                                                     yytext()+">"); }
