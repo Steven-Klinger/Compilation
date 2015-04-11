@@ -1,4 +1,4 @@
-package analyse ;
+package plic ;
 import java_cup.runtime.*;
 action code {: /* vide pour le moment */
 	    :} ;
@@ -62,7 +62,9 @@ terminal Integer    CSTE;
    integer value are listed.  An object value means that it can be any type, it isn't set to a 
    specific type.  So it could be an Integer or a String or whatever. */
 
-non terminal EXP	EXP;
+non terminal 	EXP;
+
+precedence left PLUS, MINUS, TIMES, EGAL, DIFF, SUP, INF ;
 
 /* ----------------------------Grammar Section-------------------- */
 
@@ -84,5 +86,5 @@ EXP     ::= EXP:e1 PLUS EXP:e2
         |   CSTE:c
                 {: RESULT = new CsteEntiere(c);:}
         |   MINUS EXP:e1
-                {: RESULT = new MoinsUnaire(e1);:}
+                {: RESULT = new Moins(0, e1);:}
 	;
