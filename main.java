@@ -1,8 +1,8 @@
-public static void ecrireFichier(ArbreAbstrait arbre, String nomdefichier)
-			throws IOException {
-		
+public static void ecrireFichier(ArbreAbstrait arbre, String filename){
+                
+                
                 String code = arbre.getCodeFinal();
-                File fichier = new File(nomdefichier);
+                File fichier = new File(filename);
 
 		try {
 			FileOutputStream fos = new FileOutputStream(fichier);
@@ -18,17 +18,23 @@ public static void ecrireFichier(ArbreAbstrait arbre, String nomdefichier)
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		BufferedWriter ficTexte = null;
-
 		try {
+			try {
+				ecriture.append(code); 
 
-			ficTexte = new BufferedWriter(new FileWriter(nomdefichier));
-			ficTexte.write(code);
-
-		} catch (FileNotFoundException e) {
-			System.out.println(e.getMessage());
-		} catch (IOException e) {
-			System.out.println(e.getMessage());
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} finally {
+			try {
+				ecriture.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
+
 
 	}
